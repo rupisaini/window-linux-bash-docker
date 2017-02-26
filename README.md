@@ -1,4 +1,8 @@
 # Window Linux Bash in Docker
+
+Install ConEmu (https://www.fosshub.com/ConEmu.html) and run powershell inside ConEmu
+
+
 Docker to run Linux bash command and utilities
 
 docker compose command to show shell.

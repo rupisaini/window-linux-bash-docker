@@ -1,5 +1,6 @@
 FROM ubuntu
-RUN apt-get update && \ 
+RUN rm /bin/sh && ln -s /bin/bash /bin/sh && \
+	apt-get update && \ 
 	apt-get -qq -y install \
 	sudo \ 
 	wget \
@@ -12,20 +13,29 @@ RUN apt-get update && \
 	python3.4 \
 	openssl \
 	apache2-utils 
+
+ARG user
+ENV CUSER ${user:-rupisaini}
 	
 RUN curl -O https://bootstrap.pypa.io/get-pip.py && \
 	python get-pip.py --user && \
-	useradd rupisaini && \
-	usermod -aG sudo rupisaini && \
+	useradd ${CUSER} && \
+	usermod -aG sudo ${CUSER} && \
 	rm -rf /var/lib/apt/lists/* && \
 
 	# Enable passwordless sudo for users under the "sudo" group
 	sed -i.bkp -e \
       's/%sudo\s\+ALL=(ALL\(:ALL\)\?)\s\+ALL/%sudo ALL=NOPASSWD:ALL/g' \
       /etc/sudoers && \
+  
+	mkdir /home/${CUSER} && \
+	chown ${CUSER} /home/${CUSER} && \
+	git clone --depth=1 https://github.com/Bash-it/bash-it.git /home/${CUSER}/.bash_it && \
+	/home/${CUSER}/.bash_it/install.sh --silent
+	
+USER ${CUSER}
+WORKDIR /home/${CUSER} 
 
-	mkdir /home/rupisaini && \
-	chown rupisaini /home/rupisaini
-USER rupisaini
-WORKDIR /home/rupisaini 
 
+#bash-it enable plugin aws dirs git
+#bash-it enable completion dirs awscli git ssh projects

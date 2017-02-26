@@ -19,3 +19,6 @@ Commands to enable bash-it plugins and auto completion
 bash-it enable plugin aws dirs git
 bash-it enable completion dirs awscli git ssh projects terraform kubectl
 ```
+
+
+If you are checking out more repositories may be remove or move .git folder

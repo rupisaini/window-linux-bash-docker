@@ -19,7 +19,7 @@ ENV CUSER ${user:-rupisaini}
 	
 RUN curl -O https://bootstrap.pypa.io/get-pip.py && \
 	python get-pip.py --user && \
-	useradd ${CUSER} && \
+	useradd -ms /bin/bash ${CUSER} && \
 	usermod -aG sudo ${CUSER} && \
 	rm -rf /var/lib/apt/lists/* && \
 
@@ -28,8 +28,9 @@ RUN curl -O https://bootstrap.pypa.io/get-pip.py && \
       's/%sudo\s\+ALL=(ALL\(:ALL\)\?)\s\+ALL/%sudo ALL=NOPASSWD:ALL/g' \
       /etc/sudoers && \
   
-	mkdir /home/${CUSER} && \
+	#mkdir /home/${CUSER} && \
 	chown ${CUSER} /home/${CUSER} && \
+	chmod u+rw -R /home/${CUSER} && \
 	git clone --depth=1 https://github.com/Bash-it/bash-it.git /home/${CUSER}/.bash_it && \
 	/home/${CUSER}/.bash_it/install.sh --silent
 	
